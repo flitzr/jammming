@@ -5,13 +5,17 @@ const redirectURI = 'http://localhost:3000/';
 const Spotify = {
   getAccessToken() {
     if (!accessToken === '') {
+      console.log('token from variable');
       return accessToken;
     } else if (window.location.href.match(/access_token=([^&]*)/) && window.location.href.match(/expires_in=([^&]*)/)) {
+      console.log('token from URL');
       accessToken = window.location.href.match(/access_token=([^&]*)/)[1];
       let expiresIn = window.location.href.match(/expires_in=([^&]*)/)[1];
       window.setTimeout( () => accessToken = '', expiresIn * 1000);
-      window.history.pushState(accessToken, null, '/');
+      window.history.pushState('Access Token', null, '/');
+      return accessToken;
     } else {
+      console.log('redirect');
       window.location = 'https://accounts.spotify.com/authorize?client_id='
       + clientId + '&response_type=token&scope=playlist-modify-public&redirect_uri='
       + redirectURI;
@@ -19,10 +23,10 @@ const Spotify = {
   },
 
   search(term) {
-    Spotify.getAccessToken();
+    /* Spotify.getAccessToken(); */
     return fetch(`https://cors-anywhere.herokuapp.com/https://api.spotify.com/v1/search?type=track&q=${term}`, {
       headers: {
-        Authorization: 'Bearer ' + accessToken,
+        Authorization: 'Bearer ' + Spotify.getAccessToken(),
         'Content-Type': 'application/json'
       }
     }).then(response => {
@@ -44,14 +48,12 @@ const Spotify = {
   },
 
   savePlaylist(playlistName, trackURIs) {
-    Spotify.getAccessToken();
     if(playlistName === '' || trackURIs === '') {
       return;
     } else {
       /* Code that returns the user's Spotify username */
-      let accessToken = accessToken;
       let headers = {
-        Authorization: 'Bearer ' + accessToken
+        Authorization: 'Bearer ' + Spotify.getAccessToken()
       };
       let userId = '';
       return fetch('https://api.spotify.com/v1/me', {headers: headers}).then(response => {
