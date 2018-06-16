@@ -95,6 +95,8 @@ const Spotify = {
       }).catch(error => console.log('Add tracks error: ', error))
       .then(jsonResponse => {
         let snapshotId = jsonResponse.snapshot_id;
+        userId = '';
+        playlistId = '';
       });
     }
   }
