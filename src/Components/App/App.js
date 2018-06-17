@@ -31,6 +31,7 @@ class App extends Component {
       this.setState({
         playlistTracks: playlistTracks
       });
+      console.log(this.state.playlistTracks);
     }
   }
 
