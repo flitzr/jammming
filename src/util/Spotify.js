@@ -26,7 +26,7 @@ const Spotify = {
     /* Spotify.getAccessToken(); */
     return fetch(`https://cors-anywhere.herokuapp.com/https://api.spotify.com/v1/search?type=track&q=${term}`, {
       headers: {
-        Authorization: 'Bearer ' + Spotify.getAccessToken(),
+        Authorization: 'Bearer ' + accessToken,
         'Content-Type': 'application/json'
       }
     }).then(response => {
